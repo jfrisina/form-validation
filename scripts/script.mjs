@@ -31,21 +31,36 @@ if (userEmail === emailRegex) {
 
 
 // password must have at least one of the following: uppercase, lowercase, number, and special character
-function() {
-    let password = document.getElementsByName("password");
-    let uppercase = /[A-Z]/;
-    let lowercase = /[a-z]/;
-    let number = /[0-9]/;
-    let specialChar = /[!@#$%^&*]/;
+function checkPassword(password) {
+    const password = document.getElementsByName("password");
+    const uppercase = /[A-Z]/;
+    const lowercase = /[a-z]/;
+    const number = /[0-9]/;
+    const specialChar = /[!@#$%^&*()_+=-;:'"/?.>,<`~]/;
+    const passwordRegex = /password/i;
 
-// password cannot contain "password" or the username, and the password must match the second time entering password
-    if (password === passwordCheck || password.indexOf(username) === -1) {
+    if (!uppercase.test(password)) {
+        return "Password must contain at least one uppercase letter."
+    }
+
+    if (!lowercaseRegex.test(password)) {
+        return "Password must contain at least one lowercase letter."
+    }
+
+    if (!number.test(password)) {
+        return "Password must contain at least one number."
+    }
+   if (!specialChar.test(password)) {
+        return "Password must contain at least one special character."
+   } 
+};
+
+// password cannot contain "password" or the username, and passwords must match
+    if (password !=== passwordCheck || password.indexOf(username) === -1 || password === passwordRegex) {
         return false;
     } else {
         return true;
-    }
-
-}
+    };
 
 // accept terms and conditions
 let checkbox = document.getElementsByName("terms");
@@ -58,12 +73,42 @@ checkbox.addEventListener("change", function() {
 });
 
 // store username, email, and password
+function storeUserInfo(username, userEmail, password) {
+    // lowercase username and email
+    let usernameLower = username.toLowerCase();
+    let userEmailLower = userEmail.toLowerCase();
 
-// clear all form fields after successful submission
+    // create array to store user objects in 
+    const userArray = [];
+    let userInfo = {usernameLower, userEmailLower, password}
+    userArray.push(userInfo);
 
-// show success message
+    // usernames must be unique
+    
+    if (!localStorage.getItem(userInfo)) {
+        return "Username is already taken.";
+    }
 
-// usernames must be unique
+    // push to local storage
+    localStorage.setItem(userArray);
+
+    // return confirmation
+    return "User successfully added";
+
+    // clear all form fields after successful submission
+    let inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+        input.value = '';
+    });
+};
+
+storeUserInfo(username, userEmail, password);
+
+
+// check if usernames are unique
+
+
+
 
 
 // LOGIN FORM ------------------------------------------------------
